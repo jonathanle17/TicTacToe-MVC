@@ -66,8 +66,10 @@ public class Model implements MessageHandler {
         // ... then set X or O depending on whose move it is
         if (this.whoseMove) {
           this.board[row][col] = "X";
+          this.whoseMove = false;
         } else {
           this.board[row][col] = "O";
+          this.whoseMove = true;
         }
         // Send the boardChange message along with the new board 
         this.mvcMessaging.notify("boardChange", this.board);
