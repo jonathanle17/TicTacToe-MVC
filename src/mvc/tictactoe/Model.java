@@ -46,34 +46,6 @@ public class Model implements MessageHandler {
       this.gameOver = false;
   }
   
-  public boolean isWinner() {
-      String position = (String)messagePayload;
-      Integer row = Integer.valueOf(position.substring(0,1));
-      Integer col = Integer.valueOf(position.substring(1,2));
-      int rowWinner = 0;
-      int colWinner = 0;
-      int ldWinner = 0;
-      int rdWinner = 0;
-      String player;
-      
-      if (this.whoseMove) {
-          player = "X";
-      } else {
-          player = "O";
-      }
-      
-      for(int i=0; i<board.length;i++) {
-	if(this.board[row][col] = player)
-            rowWinner++;
-	if(this.board[row][col] = player)
-            colWinner++;
-	if(this.board[row][col] = player)
-            ldWinner++;
-	if(this.board[board.length-1-i][col] = player)
-            rdWinner++;	
-     }
-      
-  }
   @Override
   public void messageHandler(String messageName, Object messagePayload) {
      // Display the message to the console for debugging
