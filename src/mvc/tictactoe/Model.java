@@ -33,7 +33,7 @@ public class Model implements MessageHandler {
     this.newGame();
     this.mvcMessaging.subscribe("playerMove", this);
     this.mvcMessaging.subscribe("newGame", this);
-
+    this.mvcMessaging.subscribe("resetBoard", this);
   }
   
   private void newGame() {
@@ -76,7 +76,7 @@ public class Model implements MessageHandler {
       }
       
     // newGame message handler
-    } else if (messageName.equals("newGame")) {
+    } else if (messageName.equals("resetBoard")) {
       // Reset the app state
       this.newGame();
       // Send the boardChange message along with the new board 
