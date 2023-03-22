@@ -46,6 +46,69 @@ public class Model implements MessageHandler {
       this.gameOver = false;
   }
   
+  private String isWinner() {
+      int count = 0;
+      for (String[] board1 : this.board) {
+          for (int col = 0; col<this.board[0].length; col++) {
+              if (board1[col].equals("X")) {
+                  count++;
+              }
+              if (board1[col].equals("O")) {
+                  count--;
+              }
+              if (count == 3) {
+                  return "X";
+              }
+              if (count == -3) {
+                  return "O";
+              }
+              count = 0;
+          }
+      }
+      
+      for (int col=0; col<this.board[0].length; col++) {
+          for (String[] board1 : this.board) {
+              if (board1[col].equals("X")) {
+                  count++;
+              }
+              if (board1[col].equals("O")) {
+                  count--;
+              }
+              if (count == 3) {
+                  return "X";
+              }
+              if (count == -3) {
+                  return "O";
+              }
+              count = 0;
+          }
+      }
+      
+      if (!this.board[0][0].equals("")) {
+          if (this.board[0][0].equals(this.board[1][1]) && this.board[1][1].equals(this.board[2][2])) {
+              return this.board[0][0];
+          }
+      }
+      
+      if (!this.board[0][2].equals("")) {
+          if (this.board[0][2].equals(this.board[1][1]) && this.board[1][1].equals(this.board[2][0])) {
+              return this.board[2][0];
+          }
+      }
+      
+      for (String[] board1 : this.board) {
+          for (int col = 0; col<this.board[0].length; col++) {
+              if (!board1[col].equals("")) {
+                  count++;
+              }
+          }
+      }
+      
+      if (count == 9) {
+          return "tie";
+      }
+  }
+  
   @Override
   public void messageHandler(String messageName, Object messagePayload) {
      // Display the message to the console for debugging
