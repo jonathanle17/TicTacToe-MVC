@@ -15,7 +15,7 @@ public class Model implements MessageHandler {
   // Model's data variables
   private boolean whoseMove;
   private boolean gameOver;
-  private String[][] board;
+  private final String[][] board;
   /**
    * Model constructor: Create the data representation of the program
    * @param messages Messaging class instantiated by the Controller for 
@@ -37,9 +37,9 @@ public class Model implements MessageHandler {
   }
   
   private void newGame() {
-      for (int row=0; row<this.board.length; row++) {
-          for (int col=0; col<this.board[0].length; col++) {
-              this.board[row][col] = "";
+      for (String[] board1 : this.board) {
+          for (int col = 0; col<this.board[0].length; col++) {
+              board1[col] = "";
           }
       }
       this.whoseMove = false;
@@ -49,11 +49,12 @@ public class Model implements MessageHandler {
   private String isWinner() {
       int count = 0;
       for (String[] board1 : this.board) {
-          for (int col = 0; col<this.board[0].length; col++) {
-              if (board1[col].equals("X")) {
+          count = 0;
+          for (String rows : board1) {
+              if (rows.equals("X")) {
                   count++;
               }
-              if (board1[col].equals("O")) {
+              if (rows.equals("O")) {
                   count--;
               }
               if (count == 3) {
@@ -62,16 +63,16 @@ public class Model implements MessageHandler {
               if (count == -3) {
                   return "O";
               }
-              count = 0;
           }
       }
       
       for (int col=0; col<this.board[0].length; col++) {
-          for (String[] board1 : this.board) {
-              if (board1[col].equals("X")) {
+          count = 0;
+          for (int row=0; row<this.board.length; row++) {
+              if (board[row][col].equals("X")) {
                   count++;
               }
-              if (board1[col].equals("O")) {
+              if (board[row][col].equals("O")) {
                   count--;
               }
               if (count == 3) {
@@ -80,7 +81,6 @@ public class Model implements MessageHandler {
               if (count == -3) {
                   return "O";
               }
-              count = 0;
           }
       }
       
@@ -95,7 +95,7 @@ public class Model implements MessageHandler {
               return this.board[2][0];
           }
       }
-      
+      count = 0;
       for (String[] board1 : this.board) {
           for (int col = 0; col<this.board[0].length; col++) {
               if (!board1[col].equals("")) {
@@ -107,6 +107,8 @@ public class Model implements MessageHandler {
       if (count == 9) {
           return "tie";
       }
+      
+      return "";
   }
   
   @Override
@@ -120,22 +122,29 @@ public class Model implements MessageHandler {
     
     // playerMove message handler
     if (messageName.equals("playerMove")) {
+        if (!this.gameOver) {
       // Get the position string and convert to row and col
-      String position = (String)messagePayload;
-      Integer row = Integer.valueOf(position.substring(0,1));
-      Integer col = Integer.valueOf(position.substring(1,2));
+            String position = (String)messagePayload;
+            Integer row = Integer.valueOf(position.substring(0,1));
+            Integer col = Integer.valueOf(position.substring(1,2));
       // If square is blank...
-      if (this.board[row][col].equals("")) {
+            if (this.board[row][col].equals("")) {
         // ... then set X or O depending on whose move it is
-        if (this.whoseMove) {
-          this.board[row][col] = "X";
-          this.whoseMove = false;
-        } else {
-          this.board[row][col] = "O";
-          this.whoseMove = true;
-        }
+                if (this.whoseMove) {
+                this.board[row][col] = "X";
+                this.whoseMove = false;
+            } else {
+                this.board[row][col] = "O";
+                this.whoseMove = true;
+            }
         // Send the boardChange message along with the new board 
-        this.mvcMessaging.notify("boardChange", this.board);
+            this.mvcMessaging.notify("boardChange", this.board);
+            if (!isWinner().equals("")) {
+                String isWinner = isWinner();
+                this.mvcMessaging.notify("isWinner", isWinner);
+                this.gameOver = true;
+            }
+        }
       }
       
     // newGame message handler
