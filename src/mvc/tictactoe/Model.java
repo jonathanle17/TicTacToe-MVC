@@ -34,6 +34,7 @@ public class Model implements MessageHandler {
     this.mvcMessaging.subscribe("playerMove", this);
     this.mvcMessaging.subscribe("newGame", this);
     this.mvcMessaging.subscribe("resetBoard", this);
+    this.mvcMessaging.subscribe("firstTurn",this);
   }
   
   private void newGame() {
@@ -44,6 +45,8 @@ public class Model implements MessageHandler {
       }
       this.whoseMove = false;
       this.gameOver = false;
+      String playerTurn = playerTurn();
+      this.mvcMessaging.notify("playerTurn", playerTurn);
   }
   
   private String isWinner() {
@@ -111,6 +114,15 @@ public class Model implements MessageHandler {
       return "";
   }
   
+  private String playerTurn() {
+      if (this.whoseMove == true) {
+          return "X";
+      }
+      else {
+          return "O";
+      }
+  }
+  
   @Override
   public void messageHandler(String messageName, Object messagePayload) {
      // Display the message to the console for debugging
@@ -137,8 +149,11 @@ public class Model implements MessageHandler {
                 this.board[row][col] = "O";
                 this.whoseMove = true;
             }
+            String playerTurn = playerTurn();
+            this.mvcMessaging.notify("playerTurn", playerTurn);
         // Send the boardChange message along with the new board 
             this.mvcMessaging.notify("boardChange", this.board);
+            
             if (!isWinner().equals("")) {
                 String isWinner = isWinner();
                 this.mvcMessaging.notify("isWinner", isWinner);

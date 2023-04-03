@@ -31,7 +31,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     this.mvcMessaging.subscribe("boardChange", this);
     this.mvcMessaging.subscribe("gameOver", this);
     this.mvcMessaging.subscribe("isWinner", this);
-
+    this.mvcMessaging.subscribe("playerTurn", this);
   }
   
   @Override
@@ -55,6 +55,10 @@ public class View extends javax.swing.JFrame implements MessageHandler {
       jButton7.setText(board[2][0]);
       jButton8.setText(board[2][1]);
       jButton9.setText(board[2][2]);
+    }
+    
+    if (messageName.equals("playerTurn")) {
+        jLabel1.setText(messagePayload + "'s turn");
     }
     
     else if (messageName.equals("isWinner")) {
@@ -200,7 +204,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
                         .addGap(43, 43, 43)
                         .addComponent(jButton10)
                         .addGap(55, 55, 55)
-                        .addComponent(jLabel1))))
+                        .addComponent(jLabel1)))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,6 +246,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         // TODO add your handling code here:
         jLabel1.setText("");
         this.mvcMessaging.notify("resetBoard");
+        this.mvcMessaging.notify("firstTurn");
     }//GEN-LAST:event_newGame
 
   /**
