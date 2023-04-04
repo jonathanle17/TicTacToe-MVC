@@ -244,9 +244,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
     private void newGame(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame
         // TODO add your handling code here:
-        jLabel1.setText("");
         this.mvcMessaging.notify("resetBoard");
-        this.mvcMessaging.notify("firstTurn");
     }//GEN-LAST:event_newGame
 
   /**

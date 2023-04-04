@@ -34,7 +34,6 @@ public class Model implements MessageHandler {
     this.mvcMessaging.subscribe("playerMove", this);
     this.mvcMessaging.subscribe("newGame", this);
     this.mvcMessaging.subscribe("resetBoard", this);
-    this.mvcMessaging.subscribe("firstTurn",this);
   }
   
   private void newGame() {
